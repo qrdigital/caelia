@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Caelia - VentaLista Premium</title>
     
-    <!-- 3. Espacio para Favicon e imágenes de previsualización al compartir en WhatsApp (Metatags Open Graph) -->
-    <link rel="icon" type="image/png" href="faviconcaelia.png">
+    <link rel="icon" type="image/png" href="https://qrdigital.github.io/caelia/faviconcaelia.png">
     <meta property="og:title" content="Caelia - Date un Gusto Saludable">
     <meta property="og:description" content="Catálogo interactivo de chocolates artesanales y despensa natural.">
-    <meta property="og:image" content="faviconcaelia.png">
+    <meta property="og:image" content="https://qrdigital.github.io/caelia/faviconcaelia.png">
     <meta property="og:type" content="website">
 
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -19,7 +18,6 @@
             box-sizing: border-box;
         }
         
-        /* 2. Barra lateral visible para dejar en claro que se puede scrolear */
         html {
             scrollbar-width: auto;
             scrollbar-color: #b3621b #f3eade;
@@ -49,7 +47,7 @@
             margin: 0 auto;
             background-color: #ffffff;
             min-height: 100vh;
-            padding-bottom: 220px; /* Espacio ampliado para el nuevo carrito dinámico */
+            padding-bottom: 220px; 
             position: relative;
             box-shadow: 0 0 20px rgba(43, 24, 16, 0.08);
         }
@@ -129,7 +127,6 @@
             box-shadow: 0 2px 6px rgba(43, 24, 16, 0.02);
         }
 
-        /* 1. Sub-bloque específico para las variantes independientes de Yogurt */
         .yogurt-variants-box {
             background: #faf6f0;
             margin: -8px 20px 15px 20px;
@@ -287,7 +284,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* Footer Fijo con Lista de Modificación */
         .footer-sticky {
             position: fixed;
             bottom: 0;
@@ -303,7 +299,6 @@
             border-top-right-radius: 20px;
         }
         
-        /* 5. Lista Desplegable que permite añadir/retirar elementos desde el propio carrito */
         .cart-preview-list {
             max-height: 120px;
             overflow-y: auto;
@@ -407,15 +402,12 @@
         <div class="badge-col"><span>🌱</span> 100% NATURAL</div>
     </div>
 
-    <!-- SECCIÓN 1: La Despensa Saludable -->
     <div class="section-title">Nuestra Despensa</div>
     <div class="product-list">
         
-        <!-- Café -->
-        <!-- 4. Nombres de imágenes en formato minuscula + caelia -->
         <div class="product-item" data-id="cafe" data-name="Café" data-price="15">
             <div class="prod-img-box" onclick="openZoom(this)">
-                <img src="cafecaelia.jpg" alt="Café">
+                <img src="https://qrdigital.github.io/caelia/cafecaelia.jpg" alt="Café">
             </div>
             <div class="prod-info">
                 <div class="prod-name">Café</div>
@@ -432,10 +424,9 @@
             </div>
         </div>
 
-        <!-- Granola Premium -->
         <div class="product-item" data-id="granola" data-name="Granola Premium" data-price="15">
             <div class="prod-img-box" onclick="openZoom(this)">
-                <img src="granolapremiumcaelia.jpg" alt="Granola">
+                <img src="https://qrdigital.github.io/caelia/granolapremiumcaelia.jpg" alt="Granola">
             </div>
             <div class="prod-info">
                 <div class="prod-name">Granola Premium</div>
@@ -452,10 +443,9 @@
             </div>
         </div>
 
-        <!-- Yogurt Frutado (Cabecera Visual sin contador general) -->
         <div class="product-item" style="margin-bottom: 0; border-bottom: none; border-bottom-left-radius: 0; border-bottom-right-radius: 0;">
             <div class="prod-img-box" onclick="openZoom(this)">
-                <img src="yogurtfrutadocaelia.jpg" alt="Yogurt">
+                <img src="https://qrdigital.github.io/caelia/yogurtfrutadocaelia.jpg" alt="Yogurt">
             </div>
             <div class="prod-info">
                 <div class="prod-name">Yogurt Frutado</div>
@@ -464,9 +454,7 @@
             </div>
         </div>
         
-        <!-- 1. Desglose de Sabores Independientes para el Yogurt Frutado -->
         <div class="yogurt-variants-box">
-            <!-- Fresa -->
             <div class="variant-item" data-id="yogurt_fresa" data-name="Yogurt Frutado (Fresa)" data-price="12">
                 <div class="variant-name">🍓 Sabor Fresa (S/. 12)</div>
                 <div class="qty-controls">
@@ -475,7 +463,6 @@
                     <button class="qty-btn" onclick="updateQty('yogurt_fresa', 1)">+</button>
                 </div>
             </div>
-            <!-- Arándanos -->
             <div class="variant-item" data-id="yogurt_arandanos" data-name="Yogurt Frutado (Arándanos)" data-price="12">
                 <div class="variant-name">🫐 Sabor Arándanos (S/. 12)</div>
                 <div class="qty-controls">
@@ -484,7 +471,6 @@
                     <button class="qty-btn" onclick="updateQty('yogurt_arandanos', 1)">+</button>
                 </div>
             </div>
-            <!-- Lúcuma -->
             <div class="variant-item" data-id="yogurt_lucuma" data-name="Yogurt Frutado (Lúcuma)" data-price="12">
                 <div class="variant-name">🥑 Sabor Lúcuma (S/. 12)</div>
                 <div class="qty-controls">
@@ -493,7 +479,6 @@
                     <button class="qty-btn" onclick="updateQty('yogurt_lucuma', 1)">+</button>
                 </div>
             </div>
-            <!-- Durazno -->
             <div class="variant-item" data-id="yogurt_durazno" data-name="Yogurt Frutado (Durazno)" data-price="12">
                 <div class="variant-name">🍑 Sabor Durazno (S/. 12)</div>
                 <div class="qty-controls">
@@ -504,10 +489,9 @@
             </div>
         </div>
 
-        <!-- Miel de Abeja -->
         <div class="product-item" data-id="miel" data-name="Miel de Abeja" data-price="12">
             <div class="prod-img-box" onclick="openZoom(this)">
-                <img src="mieldeabejacaelia.jpg" alt="Miel">
+                <img src="https://qrdigital.github.io/caelia/mieldeabejacaelia.jpg" alt="Miel">
             </div>
             <div class="prod-info">
                 <div class="prod-name">Miel de Abeja</div>
@@ -524,10 +508,9 @@
             </div>
         </div>
 
-        <!-- Algarrobina -->
         <div class="product-item" data-id="algarrobina" data-name="Algarrobina" data-price="12">
             <div class="prod-img-box" onclick="openZoom(this)">
-                <img src="algarrobinacaelia.jpg" alt="Algarrobina">
+                <img src="https://qrdigital.github.io/caelia/algarrobinacaelia.jpg" alt="Algarrobina">
             </div>
             <div class="prod-info">
                 <div class="prod-name">Algarrobina</div>
@@ -544,10 +527,9 @@
             </div>
         </div>
 
-        <!-- Mantequilla de Maní -->
         <div class="product-item" data-id="mani" data-name="Mantequilla de Maní" data-price="12">
             <div class="prod-img-box" onclick="openZoom(this)">
-                <img src="mantequillademanicaelia.jpg" alt="Mantequilla de maní">
+                <img src="https://qrdigital.github.io/caelia/mantequillademanicaelia.jpg" alt="Mantequilla de maní">
             </div>
             <div class="prod-info">
                 <div class="prod-name">Mantequilla de Maní</div>
@@ -565,7 +547,6 @@
         </div>
     </div>
 
-    <!-- SECCIÓN 2: Oculta bajo botón -->
     <div class="btn-container">
         <button class="toggle-btn" id="toggleBtn" onclick="toggleCreaciones()">Ver Nuestras Creaciones de Cacao ➔</button>
     </div>
@@ -573,10 +554,9 @@
     <div class="hidden-section" id="creacionesSection">
         <div class="section-title">Nuestras Creaciones</div>
         <div class="product-list">
-            <!-- Pasta Pura -->
-            <div class="product-item" data-id="pastapura" data-name="Pasta Pura 100% Cacao" data-price="18">
+            <div class="product-item" data-id="pastapura" data-name="Pasta Pura 100% Cacao" data-price="20">
                 <div class="prod-img-box" onclick="openZoom(this)">
-                    <img src="chocopasioncaelia.jpg" alt="Pasta Pura">
+                    <img src="https://qrdigital.github.io/caelia/chocopasioncaelia.jpg" alt="Pasta Pura">
                 </div>
                 <div class="prod-info">
                     <div class="prod-name">CHOCOPASION</div>
@@ -593,10 +573,9 @@
                 </div>
             </div>
 
-            <!-- Grajeas -->
             <div class="product-item" data-id="grajeas" data-name="Chocolate 85% en Grajeas" data-price="20">
                 <div class="prod-img-box" onclick="openZoom(this)">
-                    <img src="chocodatilcaelia.jpg" alt="Grajeas">
+                    <img src="https://qrdigital.github.io/caelia/chocodatilcaelia.jpg" alt="Grajeas">
                 </div>
                 <div class="prod-info">
                     <div class="prod-name">CHOCODATIL</div>
@@ -613,10 +592,9 @@
                 </div>
             </div>
 
-            <!-- Snacks Combinados -->
-            <div class="product-item" data-id="snacks" data-name="Mix de Snacks de Cacao" data-price="16">
+            <div class="product-item" data-id="snacks" data-name="Mix de Snacks de Cacao" data-price="20">
                 <div class="prod-img-box" onclick="openZoom(this)">
-                    <img src="choconutcaelia.jpg" alt="Snacks">
+                    <img src="https://qrdigital.github.io/caelia/choconutcaelia.jpg" alt="Snacks">
                 </div>
                 <div class="prod-info">
                     <div class="prod-name">CHOCONUT</div>
@@ -639,7 +617,6 @@
         🛵 DELIVERY GRATIS EN TODA LA ESTANCIA
     </div>
 
-    <!-- Carrito Avanzado Interactivo -->
     <div class="footer-sticky">
         <ul class="cart-preview-list" id="cartPreviewList"></ul>
         <div class="cart-status">
@@ -664,21 +641,18 @@
         cart[id] += change;
         if (cart[id] < 0) cart[id] = 0;
         
-        // Sincronizar con el contador visual correspondiente del cuerpo principal si existe
         const element = document.getElementById(`qty-${id}`);
         if (element) element.innerText = cart[id];
         
         calculateTotal();
     }
 
-    // 5. Motor de cálculo dinámico que recrea los botones +/- dentro del desplegable del carrito
     function calculateTotal() {
         let total = 0;
         let totalItems = 0;
         const previewList = document.getElementById('cartPreviewList');
         previewList.innerHTML = ""; 
         
-        // Buscar productos estándar y variantes de yogurt
         const items = document.querySelectorAll('.product-item, .variant-item');
         
         items.forEach(item => {
