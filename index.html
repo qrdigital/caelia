@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caelia - VentaLista Premium</title>
+    
+    <!-- 3. Espacio para Favicon e imágenes de previsualización al compartir en WhatsApp (Metatags Open Graph) -->
+    <link rel="icon" type="image/png" href="faviconcaelia.png">
+    <meta property="og:title" content="Caelia - Date un Gusto Saludable">
+    <meta property="og:description" content="Catálogo interactivo de chocolates artesanales y despensa natural.">
+    <meta property="og:image" content="faviconcaelia.png">
+    <meta property="og:type" content="website">
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        
+        /* 2. Barra lateral visible para dejar en claro que se puede scrolear */
+        html {
+            scrollbar-width: auto;
+            scrollbar-color: #b3621b #f3eade;
+        }
+        body::-webkit-scrollbar {
+            width: 12px;
+            display: block;
+        }
+        body::-webkit-scrollbar-track {
+            background: #f3eade;
+        }
+        body::-webkit-scrollbar-thumb {
+            background-color: #b3621b;
+            border-radius: 6px;
+            border: 3px solid #f3eade;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fcf9f5;
+            color: #2b1810;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            min-height: 100vh;
+            padding-bottom: 220px; /* Espacio ampliado para el nuevo carrito dinámico */
+            position: relative;
+            box-shadow: 0 0 20px rgba(43, 24, 16, 0.08);
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2b1810 0%, #170c08 100%);
+            color: #ffffff;
+            text-align: center;
+            padding: 40px 20px 50px 20px;
+            border-bottom-left-radius: 25px;
+            border-bottom-right-radius: 25px;
+        }
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            margin: 0;
+            font-size: 36px;
+            letter-spacing: 3px;
+            color: #dca842;
+        }
+        header p {
+            font-family: 'Playfair Display', serif;
+            margin: 12px 0 0 0;
+            font-size: 20px;
+            font-style: italic;
+            color: #f5e6cc;
+            letter-spacing: 0.5px;
+        }
+        
+        .badges-container {
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+            margin: -25px auto 25px auto;
+            background: #ffffff;
+            border-radius: 30px;
+            padding: 12px 20px;
+            box-shadow: 0 6px 18px rgba(43, 24, 16, 0.15);
+            position: relative;
+            z-index: 10;
+        }
+        .badge-col {
+            flex: 1;
+            font-weight: 700;
+            font-size: 12px;
+            color: #2b1810;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 0.5px;
+        }
+        .badge-col span {
+            margin-right: 6px;
+            font-size: 14px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: #2b1810;
+            margin: 30px 20px 15px 20px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #f3eade;
+            font-weight: 800;
+        }
+
+        .product-list {
+            padding: 0 20px;
+        }
+        .product-item {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            padding: 14px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            border: 1px solid #f0e6da;
+            box-shadow: 0 2px 6px rgba(43, 24, 16, 0.02);
+        }
+
+        /* 1. Sub-bloque específico para las variantes independientes de Yogurt */
+        .yogurt-variants-box {
+            background: #faf6f0;
+            margin: -8px 20px 15px 20px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #eadecc;
+        }
+        .variant-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid #f0e6da;
+        }
+        .variant-item:last-child {
+            border-bottom: none;
+        }
+        .variant-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a3329;
+        }
+
+        .prod-img-box {
+            width: 65px;
+            height: 65px;
+            background-color: #f7f2eb;
+            border-radius: 8px;
+            margin-right: 14px;
+            overflow: hidden;
+            flex-shrink: 0;
+            cursor: pointer;
+            border: 1px solid #eadecc;
+            position: relative;
+        }
+        .prod-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .prod-img-box::after {
+            content: "🔍";
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            font-size: 10px;
+            background: rgba(255,255,255,0.8);
+            padding: 1px 3px;
+            border-radius: 4px;
+        }
+
+        .prod-info {
+            flex-grow: 1;
+            padding-right: 8px;
+        }
+        .prod-name {
+            font-weight: 700;
+            font-size: 15px;
+            color: #2b1810;
+        }
+        .prod-attribute {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #b3621b;
+            letter-spacing: 0.5px;
+            margin: 1px 0;
+        }
+        .prod-meta {
+            font-size: 12px;
+            color: #705e57;
+            margin-top: 1px;
+            line-height: 1.3;
+        }
+        
+        .prod-action {
+            text-align: right;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 65px;
+        }
+        .prod-price {
+            font-weight: 700;
+            font-size: 15px;
+            color: #b3621b;
+        }
+
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            background: #f7f2eb;
+            border-radius: 20px;
+            padding: 2px;
+            border: 1px solid #eadecc;
+        }
+        .qty-btn {
+            background: none;
+            border: none;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #2b1810;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qty-val {
+            font-size: 13px;
+            font-weight: 700;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .btn-container {
+            padding: 20px;
+        }
+        .toggle-btn {
+            background: linear-gradient(135deg, #b3621b 0%, #914d12 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 30px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(179, 98, 27, 0.25);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        .hidden-section {
+            display: none;
+        }
+        .hidden-section.active {
+            display: block;
+        }
+
+        .delivery-banner {
+            background-color: #faf5ee;
+            border: 1px dashed #b3621b;
+            margin: 20px;
+            padding: 14px;
+            text-align: center;
+            border-radius: 10px;
+            font-weight: 700;
+            color: #b3621b;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Footer Fijo con Lista de Modificación */
+        .footer-sticky {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            background: #ffffff;
+            padding: 12px 20px;
+            box-shadow: 0 -6px 25px rgba(43, 24, 16, 0.15);
+            z-index: 1000;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        
+        /* 5. Lista Desplegable que permite añadir/retirar elementos desde el propio carrito */
+        .cart-preview-list {
+            max-height: 120px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            padding: 0;
+            list-style: none;
+            font-size: 13px;
+            color: #2b1810;
+            border-bottom: 1px dashed #f0e6da;
+            display: none;
+        }
+        .cart-preview-list.has-items {
+            display: block;
+        }
+        .cart-preview-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+        }
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cart-action-btn {
+            background: #b3621b;
+            color: white;
+            border: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .cart-total-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #b3621b;
+        }
+        .ws-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #25d366;
+            color: white;
+            text-decoration: none;
+            padding: 14px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+            gap: 8px;
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(23, 12, 8, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .lightbox.active {
+            display: flex;
+        }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>CAELIA</h1>
+        <p>"Date un Gusto Saludable"</p>
+    </header>
+
+    <div class="badges-container">
+        <div class="badge-col"><span>⚡</span> 100% ARTESANAL</div>
+        <div class="badge-col"><span>🌱</span> 100% NATURAL</div>
+    </div>
+
+    <!-- SECCIÓN 1: La Despensa Saludable -->
+    <div class="section-title">Nuestra Despensa</div>
+    <div class="product-list">
+        
+        <!-- Café -->
+        <!-- 4. Nombres de imágenes en formato minuscula + caelia -->
+        <div class="product-item" data-id="cafe" data-name="Café" data-price="15">
+            <div class="prod-img-box" onclick="openZoom(this)">
+                <img src="cafecaelia.jpg" alt="Café">
+            </div>
+            <div class="prod-info">
+                <div class="prod-name">Café</div>
+                <div class="prod-attribute">Directo de Chanchamayo</div>
+                <div class="prod-meta">Presentación: 250g</div>
+            </div>
+            <div class="prod-action">
+                <div class="prod-price">S/. 15</div>
+                <div class="qty-controls">
+                    <button class="qty-btn" onclick="updateQty('cafe', -1)">-</button>
+                    <div class="qty-val" id="qty-cafe">0</div>
+                    <button class="qty-btn" onclick="updateQty('cafe', 1)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Granola Premium -->
+        <div class="product-item" data-id="granola" data-name="Granola Premium" data-price="15">
+            <div class="prod-img-box" onclick="openZoom(this)">
+                <img src="granolapremiumcaelia.jpg" alt="Granola">
+            </div>
+            <div class="prod-info">
+                <div class="prod-name">Granola Premium</div>
+                <div class="prod-attribute">Endulzado Natural</div>
+                <div class="prod-meta">250g | Sin azúcar, con dátiles</div>
+            </div>
+            <div class="prod-action">
+                <div class="prod-price">S/. 15</div>
+                <div class="qty-controls">
+                    <button class="qty-btn" onclick="updateQty('granola', -1)">-</button>
+                    <div class="qty-val" id="qty-granola">0</div>
+                    <button class="qty-btn" onclick="updateQty('granola', 1)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Yogurt Frutado (Cabecera Visual sin contador general) -->
+        <div class="product-item" style="margin-bottom: 0; border-bottom: none; border-bottom-left-radius: 0; border-bottom-right-radius: 0;">
+            <div class="prod-img-box" onclick="openZoom(this)">
+                <img src="yogurtfrutadocaelia.jpg" alt="Yogurt">
+            </div>
+            <div class="prod-info">
+                <div class="prod-name">Yogurt Frutado</div>
+                <div class="prod-attribute">Fruta 100% Seleccionada</div>
+                <div class="prod-meta">Presentación: 900ml (Elige tus sabores abajo)</div>
+            </div>
+        </div>
+        
+        <!-- 1. Desglose de Sabores Independientes para el Yogurt Frutado -->
+        <div class="yogurt-variants-box">
+            <!-- Fresa -->
+            <div class="variant-item" data-id="yogurt_fresa" data-name="Yogurt Frutado (Fresa)" data-price="12">
+                <div class="variant-name">🍓 Sabor Fresa (S/. 12)</div>
+                <div class="qty-controls">
+                    <button class="qty-btn" onclick="updateQty('yogurt_fresa', -1)">-</button>
+                    <div class="qty-val" id="qty-yogurt_fresa">0</div>
+                    <button class="qty-btn" onclick="updateQty('yogurt_fresa', 1)">+</button>
+                </div>
+            </div>
+            <!-- Arándanos -->
+            <div class="variant-item" data-id="yogurt_arandanos" data-name="Yogurt Frutado (Arándanos)" data-price="12">
+                <div class="variant-name">🫐 Sabor Arándanos (S/. 12)</div>
+                <div class="qty-controls">
+                    <button class="qty-btn" onclick="updateQty('yogurt_arandanos', -1)">-</button>
+                    <div class="qty-val" id="qty-yogurt_arandanos">0</div>
+                    <button class="qty-btn" onclick="updateQty('yogurt_arandanos', 1)">+</button>
+                </div>
+            </div>
+            <!-- Lúcuma -->
+            <div class="variant-item" data-id="yogurt_lucuma" data-name="Yogurt Frutado (Lúcuma)" data-price="12">
+                <div class="variant-name">🥑 Sabor Lúcuma (S/. 12)</div>
+                <div class="qty-controls">
+                    <button class="qty-btn" onclick="updateQty('yogurt_lucuma', -1)">-</button>
+                    <div class="qty-val" id="qty-yogurt_lucuma">0</div>
+                    <button class="qty-btn" onclick="updateQty('yogurt_lucuma', 1)">+</button>
+                </div>
+            </div>
+            <!-- Durazno -->
+            <div class="variant-item" data-id="yogurt_durazno" data-name="Yogurt Frutado (Durazno)" data-price="12">
+                <div class="variant-name">🍑 Sabor Durazno (S/. 12)</div>
+                <div class="qty-controls">
+                    <button class="qty-btn" onclick="updateQty('yogurt_durazno', -1)">-</button>
+                    <div class="qty-val" id="qty-yogurt_durazno">0</div>
+                    <button class="qty-btn" onclick="updateQty('yogurt_durazno', 1)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Miel de Abeja -->
+        <div class="product-item" data-id="miel" data-name="Miel de Abeja" data-price="12">
+            <div class="prod-img-box" onclick="openZoom(this)">
+                <img src="mieldeabejacaelia.jpg" alt="Miel">
+            </div>
+            <div class="prod-info">
+                <div class="prod-name">Miel de Abeja</div>
+                <div class="prod-attribute">Calidad de Exportación</div>
+                <div class="prod-meta">Presentación: 250g</div>
+            </div>
+            <div class="prod-action">
+                <div class="prod-price">S/. 12</div>
+                <div class="qty-controls">
+                    <button class="qty-btn" onclick="updateQty('miel', -1)">-</button>
+                    <div class="qty-val" id="qty-miel">0</div>
+                    <button class="qty-btn" onclick="updateQty('miel', 1)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Algarrobina -->
+        <div class="product-item" data-id="algarrobina" data-name="Algarrobina" data-price="12">
+            <div class="prod-img-box" onclick="openZoom(this)">
+                <img src="algarrobinacaelia.jpg" alt="Algarrobina">
+            </div>
+            <div class="prod-info">
+                <div class="prod-name">Algarrobina</div>
+                <div class="prod-attribute">Energía Pura Concentrada</div>
+                <div class="prod-meta">Presentación: 250g</div>
+            </div>
+            <div class="prod-action">
+                <div class="prod-price">S/. 12</div>
+                <div class="qty-controls">
+                    <button class="qty-btn" onclick="updateQty('algarrobina', -1)">-</button>
+                    <div class="qty-val" id="qty-algarrobina">0</div>
+                    <button class="qty-btn" onclick="updateQty('algarrobina', 1)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mantequilla de Maní -->
+        <div class="product-item" data-id="mani" data-name="Mantequilla de Maní" data-price="12">
+            <div class="prod-img-box" onclick="openZoom(this)">
+                <img src="mantequillademanicaelia.jpg" alt="Mantequilla de maní">
+            </div>
+            <div class="prod-info">
+                <div class="prod-name">Mantequilla de Maní</div>
+                <div class="prod-attribute">Un solo Ingrediente</div>
+                <div class="prod-meta">Presentación: 250g</div>
+            </div>
+            <div class="prod-action">
+                <div class="prod-price">S/. 12</div>
+                <div class="qty-controls">
+                    <button class="qty-btn" onclick="updateQty('mani', -1)">-</button>
+                    <div class="qty-val" id="qty-mani">0</div>
+                    <button class="qty-btn" onclick="updateQty('mani', 1)">+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN 2: Oculta bajo botón -->
+    <div class="btn-container">
+        <button class="toggle-btn" id="toggleBtn" onclick="toggleCreaciones()">Ver Nuestras Creaciones de Cacao ➔</button>
+    </div>
+
+    <div class="hidden-section" id="creacionesSection">
+        <div class="section-title">Nuestras Creaciones</div>
+        <div class="product-list">
+            <!-- Pasta Pura -->
+            <div class="product-item" data-id="pastapura" data-name="Pasta Pura 100% Cacao" data-price="18">
+                <div class="prod-img-box" onclick="openZoom(this)">
+                    <img src="chocopasioncaelia.jpg" alt="Pasta Pura">
+                </div>
+                <div class="prod-info">
+                    <div class="prod-name">CHOCOPASION</div>
+                    <div class="prod-attribute">Bombones con frutos rojos y frutas hidrofilizadas</div>
+                    <div class="prod-meta">Caja de 10 Bombones</div>
+                </div>
+                <div class="prod-action">
+                    <div class="prod-price">S/. 20</div>
+                    <div class="qty-controls">
+                        <button class="qty-btn" onclick="updateQty('pastapura', -1)">-</button>
+                        <div class="qty-val" id="qty-pastapura">0</div>
+                        <button class="qty-btn" onclick="updateQty('pastapura', 1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grajeas -->
+            <div class="product-item" data-id="grajeas" data-name="Chocolate 85% en Grajeas" data-price="20">
+                <div class="prod-img-box" onclick="openZoom(this)">
+                    <img src="chocodatilcaelia.jpg" alt="Grajeas">
+                </div>
+                <div class="prod-info">
+                    <div class="prod-name">CHOCODATIL</div>
+                    <div class="prod-attribute">La fuerza del cacao equilibrada con lo sutil del datil</div>
+                    <div class="prod-meta">Caja de 10 bombones</div>
+                </div>
+                <div class="prod-action">
+                    <div class="prod-price">S/. 20</div>
+                    <div class="qty-controls">
+                        <button class="qty-btn" onclick="updateQty('grajeas', -1)">-</button>
+                        <div class="qty-val" id="qty-grajeas">0</div>
+                        <button class="qty-btn" onclick="updateQty('grajeas', 1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Snacks Combinados -->
+            <div class="product-item" data-id="snacks" data-name="Mix de Snacks de Cacao" data-price="16">
+                <div class="prod-img-box" onclick="openZoom(this)">
+                    <img src="choconutcaelia.jpg" alt="Snacks">
+                </div>
+                <div class="prod-info">
+                    <div class="prod-name">CHOCONUT</div>
+                    <div class="prod-attribute">Combinacion de cacao con nueces selectas</div>
+                    <div class="prod-meta">Caja de 10 bombones</div>
+                </div>
+                <div class="prod-action">
+                    <div class="prod-price">S/. 20</div>
+                    <div class="qty-controls">
+                        <button class="qty-btn" onclick="updateQty('snacks', -1)">-</button>
+                        <div class="qty-val" id="qty-snacks">0</div>
+                        <button class="qty-btn" onclick="updateQty('snacks', 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="delivery-banner">
+        🛵 DELIVERY GRATIS EN TODA LA ESTANCIA
+    </div>
+
+    <!-- Carrito Avanzado Interactivo -->
+    <div class="footer-sticky">
+        <ul class="cart-preview-list" id="cartPreviewList"></ul>
+        <div class="cart-status">
+            <span id="cart-count">Sin productos seleccionados</span>
+            <span class="cart-total-price" id="cart-total">S/. 0.00</span>
+        </div>
+        <a href="#" class="ws-btn" id="whatsappBtn" onclick="sendOrder(event)">
+            Haz tu Pedido por WhatsApp
+        </a>
+    </div>
+</div>
+
+<div class="lightbox" id="imageLightbox">
+    <img id="lightboxImg" src="" alt="Zoom">
+</div>
+
+<script>
+    const cart = {};
+
+    function updateQty(id, change) {
+        if (!cart[id]) cart[id] = 0;
+        cart[id] += change;
+        if (cart[id] < 0) cart[id] = 0;
+        
+        // Sincronizar con el contador visual correspondiente del cuerpo principal si existe
+        const element = document.getElementById(`qty-${id}`);
+        if (element) element.innerText = cart[id];
+        
+        calculateTotal();
+    }
+
+    // 5. Motor de cálculo dinámico que recrea los botones +/- dentro del desplegable del carrito
+    function calculateTotal() {
+        let total = 0;
+        let totalItems = 0;
+        const previewList = document.getElementById('cartPreviewList');
+        previewList.innerHTML = ""; 
+        
+        // Buscar productos estándar y variantes de yogurt
+        const items = document.querySelectorAll('.product-item, .variant-item');
+        
+        items.forEach(item => {
+            const id = item.getAttribute('data-id');
+            if(!id) return; 
+            
+            const name = item.getAttribute('data-name');
+            const price = parseFloat(item.getAttribute('data-price'));
+            const qty = cart[id] || 0;
+            
+            if (qty > 0) {
+                total += price * qty;
+                totalItems += qty;
+                
+                const li = document.createElement('li');
+                li.className = 'cart-preview-item';
+                li.innerHTML = `
+                    <span>✔ ${name}</span>
+                    <div class="cart-item-actions">
+                        <button class="cart-action-btn" onclick="updateQty('${id}', -1)">-</button>
+                        <span>${qty}</span>
+                        <button class="cart-action-btn" onclick="updateQty('${id}', 1)">+</button>
+                        <span style="margin-left:5px; font-weight:600;">S/. ${(price * qty).toFixed(2)}</span>
+                    </div>
+                `;
+                previewList.appendChild(li);
+            }
+        });
+        
+        const countText = document.getElementById('cart-count');
+        const totalText = document.getElementById('cart-total');
+        
+        if (totalItems > 0) {
+            previewList.classList.add('has-items');
+            countText.innerText = `${totalItems} producto(s) añadidos`;
+            totalText.innerText = `S/. ${total.toFixed(2)}`;
+        } else {
+            previewList.classList.remove('has-items');
+            countText.innerText = 'Sin productos seleccionados';
+            totalText.innerText = 'S/. 0.00';
+        }
+    }
+
+    function sendOrder(e) {
+        e.preventDefault();
+        const phoneNumber = "51913642644";
+        let hasProducts = false;
+        let message = "Deseo esto:\n\n";
+        let grandTotal = 0;
+
+        const items = document.querySelectorAll('.product-item, .variant-item');
+        items.forEach(item => {
+            const id = item.getAttribute('data-id');
+            if(!id) return;
+            
+            const name = item.getAttribute('data-name');
+            const price = parseFloat(item.getAttribute('data-price'));
+            const qty = cart[id] || 0;
+            
+            if (qty > 0) {
+                hasProducts = true;
+                const subtotal = price * qty;
+                grandTotal += subtotal;
+                message += `• ${qty}x ${name} (S/. ${subtotal})\n`;
+            }
+        });
+
+        if (!hasProducts) {
+            message = "Hola, deseo información sobre sus productos.";
+        } else {
+            message += `\nTotal a pagar: S/. ${grandTotal.toFixed(2)}\n`;
+            message += "Envío a domicilio en La Estancia.";
+        }
+
+        const encodedMessage = encodeURIComponent(message);
+        window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+    }
+
+    function toggleCreaciones() {
+        const section = document.getElementById('creacionesSection');
+        const btn = document.getElementById('toggleBtn');
+        if (section.classList.contains('active')) {
+            section.classList.remove('active');
+            btn.innerHTML = 'Ver Nuestras Creaciones de Cacao ➔';
+        } else {
+            section.classList.add('active');
+            btn.innerHTML = 'Ocultar Creaciones de Cacao ✖';
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    function openZoom(element) {
+        const imgSrc = element.querySelector('img').src;
+        document.getElementById('lightboxImg').src = imgSrc;
+        document.getElementById('imageLightbox').classList.add('active');
+    }
+
+    document.getElementById('imageLightbox').addEventListener('click', function() {
+        this.classList.remove('active');
+    });
+</script>
+
+</body>
+</html>
